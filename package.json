@@ -6,6 +6,11 @@
     "scripts": {
         "test": "npx jest"
     },
+    "standard": {
+        "env": [
+            "jest"
+        ]
+    },
     "author": "",
     "license": "ISC",
     "devDependencies": {
