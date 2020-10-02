@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "jest --colors --noStackTrace --passWithNoTests --runInBand",
-        "test:staged": "npm test -- --findRelatedTests --silent"
+        "test:staged": "npm test -- --findRelatedTests --silent",
+        "test:ci": "npm test -- --coverage --silent"
     },
     "standard": {
         "env": [
