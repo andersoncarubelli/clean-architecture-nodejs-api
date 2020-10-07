@@ -79,24 +79,6 @@ describe("Auth UseCase", () => {
         expect(loadUserByEmailRepositorySpy.email).toBe("any_email@mail.com");
     });
 
-    test("Should throw if no loadUserByEmailRepository is provided", async () => {
-        const sut = new AuthUseCase({});
-        const promise = sut.auth("any_email@mail.com", "any_password");
-        expect(promise).rejects.toThrow();
-    });
-
-    test("Should throw if no dependency is provided", async () => {
-        const sut = new AuthUseCase();
-        const promise = sut.auth("any_email@mail.com", "any_password");
-        expect(promise).rejects.toThrow();
-    });
-
-    test("Should throw if no loadUserByEmailRepository has no load method", async () => {
-        const sut = new AuthUseCase({ loadUserByEmailRepository: {} });
-        const promise = sut.auth("any_email@mail.com", "any_password");
-        expect(promise).rejects.toThrow();
-    });
-
     test("Should return null if an invalid email is provided", async () => {
         const { sut, loadUserByEmailRepositorySpy } = makeSut();
         loadUserByEmailRepositorySpy.user = null;
@@ -146,5 +128,50 @@ describe("Auth UseCase", () => {
         );
         expect(accessToken).toBeTruthy();
         expect(accessToken).toBe(tokenGeneratorSpy.accessToken);
+    });
+
+    test("Should throw if invalid dependencies is provided", async () => {
+        const invalid = {};
+        const loadUserByEmailRepository = makeLoadUserByEmailRepository();
+        const encrypter = makeEncrypter();
+
+        const suts = [].concat(
+            new AuthUseCase(),
+            new AuthUseCase({
+                loadUserByEmailRepository: null,
+                encrypter: null,
+                tokenGenerator: null,
+            }),
+            new AuthUseCase({
+                loadUserByEmailRepository: invalid,
+                encrypter: null,
+                tokenGenerator: null,
+            }),
+            new AuthUseCase({
+                loadUserByEmailRepository,
+                encrypter: null,
+                tokenGenerator: null,
+            }),
+            new AuthUseCase({
+                loadUserByEmailRepository,
+                encrypter: invalid,
+                tokenGenerator: null,
+            }),
+            new AuthUseCase({
+                loadUserByEmailRepository,
+                encrypter,
+                tokenGenerator: null,
+            }),
+            new AuthUseCase({
+                loadUserByEmailRepository,
+                encrypter,
+                tokenGenerator: invalid,
+            })
+        );
+
+        for (const sut of suts) {
+            const promise = sut.auth("any_email@mail.com", "any_password");
+            expect(promise).rejects.toThrow();
+        }
     });
 });
