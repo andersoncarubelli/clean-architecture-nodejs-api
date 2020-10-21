@@ -1,5 +1,6 @@
 const { JsonWebTokenError } = require("jsonwebtoken");
 const request = require("supertest");
+let app;
 
 describe("Content-Type Middleware", () => {
     beforeEach(() => {
