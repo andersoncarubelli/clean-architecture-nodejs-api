@@ -168,7 +168,7 @@ describe("Auth UseCase", () => {
         } = makeSut();
         await sut.auth("valid_email@mail.com", "valid_password");
         expect(tokenGeneratorSpy.userId).toBe(
-            loadUserByEmailRepositorySpy.user.id
+            loadUserByEmailRepositorySpy.user._id
         );
     });
 
@@ -191,7 +191,7 @@ describe("Auth UseCase", () => {
         } = makeSut();
         await sut.auth("valid_email@mail.com", "valid_password");
         expect(updateAccessTokenRepositorySpy.userId).toBe(
-            loadUserByEmailRepositorySpy.user.id
+            loadUserByEmailRepositorySpy.user._id
         );
         expect(updateAccessTokenRepositorySpy.accessToken).toBe(
             tokenGeneratorSpy.accessToken
